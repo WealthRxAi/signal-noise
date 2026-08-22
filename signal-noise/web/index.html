@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>SIGNAL / NOISE — which AI stories are actually confirmed</title>
+<meta name="description" content="An AI news terminal that ranks stories by how many independent outlets corroborate them. Press-release syndication scores zero.">
+<meta property="og:title" content="SIGNAL / NOISE">
+<meta property="og:description" content="Which AI stories are actually confirmed. Ranked by independent corroboration, not by volume.">
+<!-- Live share card: regenerated from the board every 5 minutes, so every paste
+     of this link previews the current CONFIRMED stories rather than a static logo. -->
+<meta property="og:image" content="https://YOUR_PROJECT_REF.supabase.co/functions/v1/signal-noise-card">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SIGNAL / NOISE">
+<meta name="twitter:description" content="Which AI stories are actually confirmed — ranked by independent corroboration.">
+<meta name="twitter:image" content="https://YOUR_PROJECT_REF.supabase.co/functions/v1/signal-noise-card">
+<style>
+  :root{
+    --bg:#0e0e0d; --pane:#171716; --pane-2:#1e1e1c; --line:#2b2b28; --line-2:#3a3a36;
+    --ink:#ffffff; --ink-2:#c3c2b7; --ink-3:#8a897f; --ink-4:#5d5c54;
+    --accent:#3987e5;
+    --confirmed:#199e70; --developing:#c98500; --single:#6e6d64; --wire:#d95926;
+    --up:#199e70; --down:#d95926;
+    --mono:"SF Mono",SFMono-Regular,ui-monospace,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font:13px/1.45 var(--mono);
+    padding-bottom:env(safe-area-inset-bottom)}
+  a{color:inherit;text-decoration:none}
+  .n{font-variant-numeric:tabular-nums}
+
+  /* ---------- masthead ---------- */
+  #top{display:flex;align-items:center;gap:12px;padding:9px 12px;border-bottom:1px solid var(--line);
+    background:var(--pane);position:sticky;top:0;z-index:20}
+  #logo{font-weight:800;letter-spacing:1.5px;white-space:nowrap;font-size:14px}
+  #logo i{color:var(--ink-4);font-style:normal}
+  #logo b{color:var(--accent)}
+  #tape{flex:1;overflow:hidden;white-space:nowrap;min-width:0;mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
+  #tape-in{display:inline-block;animation:tp 60s linear infinite;padding-left:100%}
+  #tape:hover #tape-in{animation-play-state:paused}
+  @keyframes tp{to{transform:translateX(-100%)}}
+  .tq{font-size:12px;margin-right:26px;color:var(--ink-3)}
+  .tq b{color:var(--ink-2);font-weight:700}
+  .up{color:var(--up)} .down{color:var(--down)}
+  #dot{width:7px;height:7px;border-radius:50%;background:var(--up);flex:none}
+  #dot.stale{background:var(--wire)}
+  #clk{color:var(--ink-3);font-size:12px;white-space:nowrap}
+
+  /* ---------- command bar ---------- */
+  #cmdwrap{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--line);background:var(--bg)}
+  #prompt{color:var(--accent);font-weight:800}
+  #cmd{flex:1;background:transparent;border:0;outline:0;color:var(--ink);font:13px var(--mono);min-width:0}
+  #cmd::placeholder{color:var(--ink-4)}
+  #hint{color:var(--ink-4);font-size:11px;white-space:nowrap;display:none}
+  @media(min-width:900px){#hint{display:block}}
+  #hud{padding:5px 12px;border-bottom:1px solid var(--line);color:var(--ink-3);font-size:11.5px;
+    display:flex;gap:14px;flex-wrap:wrap;background:var(--pane)}
+  #hud b{color:var(--ink)}
+  #hud .cf{color:var(--confirmed)}
+
+  /* ---------- layout ---------- */
+  #grid{display:grid;grid-template-columns:1fr;gap:10px;padding:10px 12px;max-width:1560px;margin:0 auto;align-items:start}
+  #side{display:flex;flex-direction:column;gap:10px;min-width:0}
+  @media(min-width:1100px){ #grid{grid-template-columns:minmax(0,1fr) 330px} }
+  .pane{background:var(--pane);border:1px solid var(--line);border-radius:6px;overflow:hidden;min-width:0}
+  .pane h2{font-size:10.5px;letter-spacing:1.4px;color:var(--ink-3);font-weight:700;
+    padding:8px 11px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .pane h2 .r{margin-left:auto;font-weight:400;color:var(--ink-4);letter-spacing:0}
+
+  /* ---------- THE MAP ---------- */
+  #map{position:relative;width:100%;height:230px;background:var(--bg)}
+  .tile{position:absolute;border:1px solid var(--pane);overflow:hidden;cursor:pointer;
+    display:flex;flex-direction:column;justify-content:center;padding:6px 8px}
+  .tile:hover{outline:1px solid var(--ink-2);outline-offset:-1px;z-index:3}
+  .tile.on{outline:2px solid var(--accent);outline-offset:-2px;z-index:4}
+  .tile .tn{font-weight:800;font-size:11.5px;letter-spacing:.6px;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tile .tv{font-size:10.5px;opacity:.85;margin-top:2px}
+  .tile.sm .tv{display:none}
+  .tile.sm .tn{font-size:9.5px;letter-spacing:0}
+  #maplegend{display:flex;align-items:center;gap:6px;padding:6px 11px;border-top:1px solid var(--line);
+    font-size:10px;color:var(--ink-4)}
+  #maplegend i{width:13px;height:9px;display:inline-block;border-radius:2px}
+
+  /* ---------- feed ---------- */
+  .row{display:block;padding:9px 11px;border-bottom:1px solid var(--line);cursor:pointer}
+  .row:hover,.row.sel{background:var(--pane-2)}
+  .row.sel{box-shadow:inset 2px 0 0 var(--accent)}
+  .r1{display:flex;gap:9px;align-items:baseline}
+  .rk{color:var(--ink-4);width:22px;flex:none;text-align:right;font-size:11px}
+  .ttl{flex:1;min-width:0;font-size:13.5px;font-weight:600;line-height:1.35;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  .ttl mark{background:transparent;color:var(--accent);font-weight:800}
+  .r2{display:flex;gap:9px;align-items:center;margin:5px 0 0 31px;flex-wrap:wrap;font-size:11px;color:var(--ink-3)}
+  .vd{font-weight:800;letter-spacing:.5px;padding:1px 5px;border-radius:3px;font-size:10px;white-space:nowrap}
+  .vd.CONFIRMED{color:#7fe7c0;background:rgba(25,158,112,.16)}
+  .vd.DEVELOPING{color:#f0c26a;background:rgba(201,133,0,.16)}
+  .vd.SINGLE{color:var(--ink-3);background:rgba(110,109,100,.18)}
+  .vd.WIRE{color:#f0a58a;background:rgba(217,89,38,.16)}
+  .pips{display:inline-flex;gap:2px;align-items:center}
+  .pips i{width:5px;height:5px;border-radius:50%;background:var(--confirmed);display:inline-block}
+  .pips i.off{background:var(--line-2)}
+  .out{color:var(--ink-4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:230px}
+  /* hand-off chip: invisible until the row is hovered or keyboard-selected, so
+     the default reading experience stays editorial rather than promotional */
+  .pack{margin-left:auto;margin-right:8px;padding:1px 6px;border:1px solid var(--line);
+        border-radius:3px;color:var(--ink-4);font-size:10.5px;letter-spacing:.06em;
+        opacity:0;transition:opacity .12s;white-space:nowrap}
+  .row:hover .pack,.row.sel .pack{opacity:1}
+  .pack:hover{color:var(--accent);border-color:var(--accent)}
+  @media (hover:none){ .pack{opacity:1} }   /* touch has no hover to reveal it */
+  .age{margin-left:auto;color:var(--ink-4);white-space:nowrap}
+  .vel{color:var(--up);font-weight:700}
+  .state{padding:28px 12px;text-align:center;color:var(--ink-3);font-size:12px}
+  .state.err{color:#e8927c}
+
+  /* ---------- side panes ---------- */
+  .lrow{display:flex;align-items:center;gap:8px;padding:6px 11px;border-bottom:1px solid var(--line);
+    font-size:11.5px;cursor:pointer}
+  .lrow:hover{background:var(--pane-2)}
+  .lrow.on{background:var(--pane-2);box-shadow:inset 2px 0 0 var(--accent)}
+  .lname{font-weight:700;width:76px;flex:none;overflow:hidden;text-overflow:ellipsis}
+  .lbar{flex:1;height:4px;background:#26262300;background-color:#262623;border-radius:3px;overflow:hidden}
+  .lbar i{display:block;height:100%;background:var(--accent)}
+  .lnum{color:var(--ink-2);width:26px;text-align:right}
+  .lcf{color:var(--confirmed);font-weight:700;width:16px;text-align:right;font-size:10px}
+  #wadd{display:flex;gap:6px;padding:7px 11px}
+  #winp{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:4px;color:var(--ink);
+    font:11.5px var(--mono);padding:5px 7px;outline:none;min-width:0}
+  #winp:focus{border-color:var(--accent)}
+  #wbtn{border:1px solid var(--line);background:var(--pane-2);color:var(--ink-2);border-radius:4px;
+    font:700 11.5px var(--mono);padding:5px 9px;cursor:pointer}
+  .wdel{color:var(--ink-4);cursor:pointer;padding:0 2px}
+  .wdel:hover{color:var(--wire)}
+  .spike{color:var(--wire);font-weight:800;font-size:10px}
+  #hypebar{padding:9px 11px}
+  #hypebar .hb{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--confirmed),var(--developing),var(--wire));position:relative}
+  #hypebar .hb i{position:absolute;top:-3px;width:2px;height:12px;background:var(--ink);border-radius:1px}
+  #hypebar .hl{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-4);margin-top:5px}
+  #hypeval{text-align:center;font-size:11.5px;color:var(--ink-2);margin-top:6px}
+  #hypeval b{color:var(--ink);font-size:15px}
+</style>
+</head>
+<body>
+<div id="top">
+  <span id="logo">SIGNAL<i>/</i><b>NOISE</b></span>
+  <div id="tape"><div id="tape-in"></div></div>
+  <span id="dot" title="feed freshness"></span>
+  <span id="clk" class="n"></span>
+</div>
+
+<div id="cmdwrap">
+  <span id="prompt">&gt;</span>
+  <input id="cmd" spellcheck="false" autocomplete="off"
+         placeholder="type a command or search…  (HELP for the list)">
+  <span id="hint">CONFIRMED · TOP · 1H · LAB OPENAI · TOPIC AGENTS · HELP</span>
+</div>
+<div id="hud"></div>
+
+<div id="grid">
+  <div class="pane" id="feedpane">
+    <h2>STORIES <span class="r" id="fmeta"></span></h2>
+    <div id="feed"></div>
+  </div>
+
+  <div id="side">
+  <div class="pane">
+    <h2>THE MAP <span class="r">24H ATTENTION · MOMENTUM</span></h2>
+    <div id="map"></div>
+    <div id="maplegend">
+      <i style="background:#7a2f1a"></i><i style="background:#3a2a22"></i><i style="background:#26262a"></i><i style="background:#1e3a30"></i><i style="background:#177a56"></i>
+      <span style="margin-left:6px">cooling ← → heating · size = stories</span>
+    </div>
+  </div>
+
+  <div class="pane">
+    <h2>LAB RACE <span class="r">24H · ✓=CONFIRMED</span></h2>
+    <div id="labs"></div>
+  </div>
+
+  <div class="pane">
+    <h2>HYPE INDEX <span class="r">PRESS ÷ PRIMARY</span></h2>
+    <div id="hypebar">
+      <div class="hb"><i id="hypemark" style="left:0%"></i></div>
+      <div class="hl"><span>EVIDENCE</span><span>BALANCED</span><span>HYPE</span></div>
+      <div id="hypeval"></div>
+    </div>
+  </div>
+
+  <div class="pane">
+    <h2>WATCHLIST <span class="r">24H · 1H SPIKE</span></h2>
+    <div id="watch"></div>
+    <div id="wadd"><input id="winp" placeholder="track a term…" maxlength="28"><button id="wbtn">+</button></div>
+  </div>
+  </div>
+</div>
+
+<script>
+// ---- CONFIGURE ME ----------------------------------------------------
+// Point these at YOUR Supabase project (Project Settings -> API).
+const SUPABASE_URL  = "https://YOUR_PROJECT_REF.supabase.co";
+// anon (publishable) key — safe to expose: RLS restricts this role to read-only SELECT
+const SUPABASE_ANON = "YOUR_ANON_KEY";
+// ----------------------------------------------------------------------
+const HDRS = { apikey: SUPABASE_ANON, Authorization: "Bearer " + SUPABASE_ANON };
+
+// Optional downstream hand-off.
+//
+// Deliberately null in the open-source build: a self-hosted board must never
+// advertise somebody else's product. The hosted deployment sets this to route a
+// corroborated story into a content tool. Kept to one quiet chip that only
+// appears on hover or selection — the board's credibility IS the funnel, and a
+// loud CTA on every row would spend it.
+const PARTNER = null;
+// Example, if you want to route stories into your own tool:
+// const PARTNER = { name: "YourTool", label: "PACK", url: "https://example.com/new",
+//                   utm: "utm_source=signalnoise&utm_medium=story-handoff" };
+
+const WINDOWS = { "5M":5*60e3, "15M":15*60e3, "1H":3600e3, "6H":6*3600e3, "24H":86400e3, "7D":7*86400e3 };
+const DEFAULT_WATCH = ["Anthropic","OpenAI","Gemini","agents","chips","open source"];
+
+let stories = [], quotes = [], topics = [], labs = [];
+let winKey = "24H", sortMode = "SIGNAL", minCorr = 1, filterTopic = null, filterLab = null,
+    filterTerm = null, selIdx = -1, lastMsg = "";
+
+// Auto window: open on the tightest range that actually has news. A fixed 5M
+// default is empty at 3am; a fixed 24H default buries a breaking story under a
+// day of history. Picking per-load gets the freshest view that isn't blank.
+// Any manual window choice switches this off until CLEAR.
+const AUTO_ORDER = ["5M", "15M", "1H", "6H", "24H", "7D"];
+const AUTO_MIN = 5;
+let autoWindow = true;
+
+function pickAutoWindow(){
+  const prev = winKey;
+  let chosen = "24H";
+  for(const k of AUTO_ORDER){
+    winKey = k;                                  // visible() reads winKey; probe each
+    const v = visible();
+    // Not just "the tightest window with news" — the tightest window with
+    // CORROBORATED news. Independent newsrooms take hours to converge on the
+    // same story, so a 1H view is almost always 100% SINGLE SOURCE. Landing
+    // there by default meant the board opened on a wall of unconfirmed items
+    // and a CONFIRMED count of 0, which is the opposite of what it is for.
+    if(v.length >= AUTO_MIN && v.some(s => (s.corroboration || 1) >= 2)){ chosen = k; break; }
+  }
+  winKey = prev;
+  return chosen;
+}
+
+let watch;
+try { watch = JSON.parse(localStorage.getItem("sn_watch") || "null") || DEFAULT_WATCH.slice(); }
+catch(e){ watch = DEFAULT_WATCH.slice(); }
+const saveWatch = () => { try { localStorage.setItem("sn_watch", JSON.stringify(watch)); } catch(e){} };
+
+const esc = s => { const d = document.createElement("div"); d.textContent = s == null ? "" : s; return d.innerHTML; };
+function rel(ts){
+  const s = Math.max(0,(Date.now()-ts)/1000);
+  if(s<60) return Math.floor(s)+"s";
+  if(s<3600) return Math.floor(s/60)+"m";
+  if(s<86400) return Math.floor(s/3600)+"h";
+  return Math.floor(s/86400)+"d";
+}
+
+async function sb(path){
+  const c = new AbortController(); const to = setTimeout(()=>c.abort(), 9000);
+  try{
+    const r = await fetch(SUPABASE_URL + path, { signal:c.signal, headers:HDRS });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    return await r.json();
+  } finally { clearTimeout(to); }
+}
+
+async function loadAll(){
+  try{
+    const since = new Date(Date.now() - WINDOWS["7D"]).toISOString();
+    const [s,q,t,l] = await Promise.all([
+      sb(`/rest/v1/signal_stories?select=*&published_at=gte.${since}&order=signal.desc&limit=600`),
+      sb(`/rest/v1/ai_quotes?select=*&order=symbol`).catch(()=>[]),
+      sb(`/rest/v1/topic_map?select=*`).catch(()=>[]),
+      sb(`/rest/v1/lab_race?select=*&order=signal_24h.desc`).catch(()=>[]),
+    ]);
+    stories = s; quotes = q; topics = t; labs = l;
+    if(autoWindow) winKey = pickAutoWindow();
+    renderAll();
+  }catch(e){
+    document.getElementById("feed").innerHTML =
+      `<div class="state err">Can't reach the feed (${esc(e.message)}). Type R to retry.</div>`;
+  }
+}
+
+// ---------- filtering ----------
+function visible(){
+  const cut = Date.now() - WINDOWS[winKey];
+  let out = stories.filter(s => Date.parse(s.published_at) >= cut && (s.corroboration||1) >= minCorr);
+  if(filterTopic) out = out.filter(s => (s.topic||"other") === filterTopic);
+  if(filterLab)   out = out.filter(s => (s.entities||[]).includes(filterLab));
+  if(filterTerm){
+    const t = filterTerm.toLowerCase();
+    out = out.filter(s => s.title.toLowerCase().includes(t));
+  }
+  out = out.slice();
+  if(sortMode === "LATEST")   out.sort((a,b)=>Date.parse(b.published_at)-Date.parse(a.published_at));
+  else if(sortMode === "CORR")out.sort((a,b)=>(b.corroboration-a.corroboration)||(b.signal-a.signal));
+  else if(sortMode === "HYPE")out.sort((a,b)=>(b.hype-a.hype)||(b.signal-a.signal));
+  else                        out.sort((a,b)=>b.signal-a.signal);
+  return out;
+}
+
+// ---------- renders ----------
+function renderTape(){
+  const qs = quotes.map(q=>{
+    const up = (q.change_pct||0) >= 0;
+    return `<span class="tq"><b>${esc(q.symbol)}</b> <span class="n">${(+q.price).toFixed(2)}</span> `
+      + `<span class="n ${up?"up":"down"}">${up?"▲":"▼"}${Math.abs(q.change_pct||0).toFixed(2)}%</span></span>`;
+  }).join("");
+  const cf = stories.filter(s=>s.verdict==="CONFIRMED").slice(0,6)
+    .map(s=>`<span class="tq"><b style="color:var(--confirmed)">✓${s.corroboration}</b> ${esc(s.title.slice(0,74))}</span>`).join("");
+  document.getElementById("tape-in").innerHTML = (qs + cf) || `<span class="tq">loading…</span>`;
+}
+
+function renderHud(){
+  const v = visible();
+  const cf = v.filter(s=>s.verdict==="CONFIRMED").length;
+  const wire = stories.filter(s=>s.verdict==="WIRE" || (s.corroboration===1 && s.item_count>2)).length;
+  const filters = [filterTopic&&("TOPIC "+filterTopic.toUpperCase()), filterLab&&("LAB "+filterLab.toUpperCase()),
+                   filterTerm&&('"'+filterTerm+'"'), minCorr>1&&("CORR≥"+minCorr)].filter(Boolean).join(" · ");
+  document.getElementById("hud").innerHTML =
+      `<span>WINDOW <b>${winKey}</b>${autoWindow ? ' <span style="color:var(--accent)">AUTO</span>' : ""}</span>`
+    + `<span>SORT <b>${sortMode}</b></span>`
+    + `<span>STORIES <b>${v.length}</b></span>`
+    + `<span class="cf">CONFIRMED <b class="cf">${cf}</b></span>`
+    + `<span>SYNDICATED&nbsp;SUPPRESSED <b>${wire}</b></span>`
+    + (filters ? `<span style="color:var(--accent)">FILTER ${esc(filters)} <span class="wdel" id="clearf">✕</span></span>` : "")
+    + (lastMsg ? `<span style="color:var(--developing)">${esc(lastMsg)}</span>` : "");
+  const cl = document.getElementById("clearf");
+  if(cl) cl.onclick = () => { filterTopic=filterLab=filterTerm=null; minCorr=1; renderAll(); };
+}
+
+function pips(n){
+  const max = 5, on = Math.min(n, max);
+  let h = "";
+  for(let i=0;i<max;i++) h += `<i class="${i<on?"":"off"}"></i>`;
+  return `<span class="pips" title="${n} independent outlet${n===1?"":"s"}">${h}</span>`;
+}
+
+function renderFeed(){
+  const rows = visible();
+  document.getElementById("fmeta").textContent =
+    rows.length + " · " + winKey + " · " + sortMode;
+  const feed = document.getElementById("feed");
+  if(!rows.length){
+    feed.innerHTML = `<div class="state">Nothing matches. Try a wider window (24H / 7D) or type CLEAR.</div>`;
+    return;
+  }
+  const hl = filterTerm ? new RegExp("("+filterTerm.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig") : null;
+  feed.innerHTML = rows.slice(0,120).map((s,i)=>{
+    let title = esc(s.title);
+    if(hl) title = title.replace(hl,"<mark>$1</mark>");
+    const vclass = s.verdict === "SINGLE SOURCE" ? "SINGLE" : s.verdict;
+    const outs = (s.outlets||[]).slice(0,3).join(" · ") + ((s.outlets||[]).length>3 ? " +"+((s.outlets.length)-3) : "");
+    const eng = (s.points>0||s.comments>0) ? `<span class="n">▲${s.points}</span>` : "";
+    const vel = (s.velocity||0) > 15 ? `<span class="vel n">↑${Math.round(s.velocity)}/h</span>` : "";
+    return `<a class="row${i===selIdx?" sel":""}" href="${esc(s.url)}" target="_blank" rel="noopener">
+      <div class="r1"><span class="rk n">${i+1}</span><span class="ttl">${title}</span></div>
+      <div class="r2">
+        <span class="vd ${vclass}">${esc(s.verdict)}</span>
+        ${pips(s.corroboration||1)}
+        <span class="out">${esc(outs)}</span>
+        ${eng}${vel}
+        ${PARTNER ? `<span class="pack" data-pack="${i}" role="button" tabindex="-1"
+           title="Copy this story and open ${esc(PARTNER.name)}">${esc(PARTNER.label)} ↗</span>` : ""}
+        <span class="age n">${rel(Date.parse(s.published_at))}</span>
+      </div></a>`;
+  }).join("");
+}
+
+/**
+ * Hand a story off to the content tool.
+ *
+ * The row is an <a> to the article, so the chip has to stop the click from
+ * reaching it. Clipboard write can reject (denied permission, or a non-secure
+ * context) — when it does we still open the tool rather than silently doing
+ * nothing, because a failed copy is an annoyance and a dead button is a bug.
+ */
+function handoff(i){
+  if(!PARTNER) return;
+  const s = visible()[i];
+  if(!s) return;
+  const payload = s.title + "\n" + s.url;
+  const open = () => window.open(PARTNER.url + (PARTNER.url.includes("?") ? "&" : "?") + PARTNER.utm,
+                                "_blank", "noopener");
+  const done = (msg) => { lastMsg = msg; renderHud(); setTimeout(()=>{ lastMsg=""; renderHud(); }, 4000); };
+  if(navigator.clipboard?.writeText){
+    navigator.clipboard.writeText(payload)
+      .then(()=>done("story copied → paste it into " + PARTNER.name))
+      .catch(()=>done("couldn't copy — paste the headline into " + PARTNER.name))
+      .finally(open);
+  } else { done("opening " + PARTNER.name); open(); }
+}
+
+document.getElementById("feed").addEventListener("click", e => {
+  const chip = e.target.closest(".pack");
+  if(!chip) return;
+  e.preventDefault();          // don't follow the row's link to the article
+  e.stopPropagation();
+  handoff(Number(chip.dataset.pack));
+});
+
+// ---- squarified treemap ----
+function squarify(items, x, y, w, h){
+  const out = [];
+  const total = items.reduce((s,i)=>s+i.value,0) || 1;
+  let rest = items.map(i=>({...i, area:(i.value/total)*w*h}));
+  let rx=x, ry=y, rw=w, rh=h;
+  const worst = (row, side) => {
+    const sum = row.reduce((s,r)=>s+r.area,0);
+    const mx = Math.max(...row.map(r=>r.area)), mn = Math.min(...row.map(r=>r.area));
+    return Math.max((side*side*mx)/(sum*sum), (sum*sum)/(side*side*mn));
+  };
+  while(rest.length){
+    const vertical = rw >= rh;
+    const side = vertical ? rh : rw;
+    let row = [rest[0]], i = 1;
+    while(i < rest.length && worst(row, side) >= worst(row.concat(rest[i]), side)) row.push(rest[i++]);
+    const sum = row.reduce((s,r)=>s+r.area,0);
+    const thick = sum / (side || 1);
+    let off = vertical ? ry : rx;
+    for(const r of row){
+      const len = r.area / (thick || 1);
+      out.push(vertical ? {...r, x:rx, y:off, w:thick, h:len} : {...r, x:off, y:ry, w:len, h:thick});
+      off += len;
+    }
+    if(vertical){ rx += thick; rw -= thick; } else { ry += thick; rh -= thick; }
+    rest = rest.slice(row.length);
+    if(rw <= 0.5 || rh <= 0.5) break;
+  }
+  return out;
+}
+
+// sequential heat: one hue each side of a neutral midpoint (never a rainbow)
+function heatColor(m){
+  const t = Math.max(-1, Math.min(1, m));
+  if(t >= 0){
+    const s = t;                                   // neutral → green
+    return `rgb(${Math.round(38-16*s)},${Math.round(38+84*s)},${Math.round(35+51*s)})`;
+  }
+  const s = -t;                                    // neutral → orange
+  return `rgb(${Math.round(38+139*s)},${Math.round(38+11*s)},${Math.round(35+3*s)})`;
+}
+
+function renderMap(){
+  const el = document.getElementById("map");
+  const data = topics.filter(t=>t.stories > 0);
+  if(!data.length){ el.innerHTML = `<div class="state">no topic data yet</div>`; return; }
+  const W = Math.max(120, (el.clientWidth || 320) - 1), H = (el.clientHeight || 230) - 1;
+  const items = data.map(t=>({
+    key: t.topic,
+    value: Math.max(1, t.stories),
+    momentum: (t.prior_stories > 0) ? (t.stories - t.prior_stories)/Math.max(t.prior_stories,1)
+                                    : (t.stories > 2 ? 1 : 0),
+    stories: t.stories, corr: t.top_corroboration,
+  })).sort((a,b)=>b.value-a.value);
+  const laid = squarify(items, 0, 0, W, H);
+  el.innerHTML = laid.map(t=>{
+    const small = t.w < 78 || t.h < 36;
+    const bg = heatColor(t.momentum);
+    const pct = Math.round(t.momentum*100);
+    const tw = Math.max(0, Math.min(t.w, W - t.x)), th = Math.max(0, Math.min(t.h, H - t.y));
+    return `<div class="tile${small?" sm":""}${filterTopic===t.key?" on":""}" data-topic="${esc(t.key)}"
+      style="left:${t.x}px;top:${t.y}px;width:${tw}px;height:${th}px;background:${bg}"
+      title="${esc(t.key)} · ${t.stories} stories · ${pct>=0?"+":""}${pct}% vs prior 24h">
+      <div class="tn">${esc(t.key.toUpperCase())}</div>
+      <div class="tv n">${t.stories} · ${pct>=0?"+":""}${pct}%</div></div>`;
+  }).join("");
+  el.querySelectorAll(".tile").forEach(d=>{
+    d.onclick = () => { filterTopic = (filterTopic===d.dataset.topic) ? null : d.dataset.topic; selIdx=-1; renderAll(); };
+  });
+}
+
+function renderLabs(){
+  const el = document.getElementById("labs");
+  const rows = labs.filter(l=>l.stories_24h > 0).slice(0,9);
+  if(!rows.length){ el.innerHTML = `<div class="state">no lab activity in 24h</div>`; return; }
+  const max = Math.max(...rows.map(r=>r.stories_24h),1);
+  el.innerHTML = rows.map(l=>{
+    const cf = (l.top_corroboration||0) >= 3 ? "✓" : "";
+    return `<div class="lrow${filterLab===l.lab?" on":""}" data-lab="${esc(l.lab)}">
+      <span class="lname">${esc(l.lab.toUpperCase())}</span>
+      <span class="lbar"><i style="width:${Math.round(100*l.stories_24h/max)}%"></i></span>
+      <span class="lnum n">${l.stories_24h}</span><span class="lcf">${cf}</span></div>`;
+  }).join("");
+  el.querySelectorAll(".lrow").forEach(d=>{
+    d.onclick = () => { filterLab = (filterLab===d.dataset.lab) ? null : d.dataset.lab; selIdx=-1; renderAll(); };
+  });
+}
+
+function renderHype(){
+  const cut = Date.now() - 86400e3;
+  const recent = stories.filter(s=>Date.parse(s.published_at) >= cut);
+  const press = recent.reduce((a,s)=>a+(s.press_count||0),0);
+  const prim  = recent.reduce((a,s)=>a+(s.primary_count||0),0);
+  const ratio = press/(prim+1);
+  const pos = Math.max(0, Math.min(100, (ratio/6)*100));
+  document.getElementById("hypemark").style.left = pos + "%";
+  document.getElementById("hypeval").innerHTML =
+    `<b class="n">${ratio.toFixed(2)}</b> — ${press} press vs ${prim} primary sources in 24h`;
+}
+
+function renderWatch(){
+  const el = document.getElementById("watch");
+  const now = Date.now();
+  el.innerHTML = watch.map(term=>{
+    const t = term.toLowerCase();
+    const hits = stories.filter(s => Date.parse(s.published_at) > now-86400e3 && s.title.toLowerCase().includes(t));
+    const h1 = hits.filter(s => now - Date.parse(s.published_at) < 3600e3).length;
+    const spike = h1 > Math.max(1, (hits.length/24)*3);
+    return `<div class="lrow${filterTerm===term?" on":""}" data-term="${esc(term)}">
+      <span class="lname">${esc(term.toUpperCase())}</span>
+      <span class="lnum n">${hits.length}</span>
+      <span style="color:var(--ink-4);font-size:10px">${h1}/1h</span>
+      ${spike?'<span class="spike">▲</span>':''}
+      <span class="wdel" data-del="${esc(term)}">✕</span></div>`;
+  }).join("") || `<div class="state">no terms tracked</div>`;
+  el.querySelectorAll("[data-del]").forEach(d=>{
+    d.onclick = e => { e.stopPropagation(); watch = watch.filter(x=>x!==d.dataset.del); saveWatch();
+      if(filterTerm===d.dataset.del) filterTerm=null; renderAll(); };
+  });
+  el.querySelectorAll(".lrow").forEach(d=>{
+    d.onclick = () => { filterTerm = (filterTerm===d.dataset.term) ? null : d.dataset.term; selIdx=-1; renderAll(); };
+  });
+}
+
+function renderAll(){
+  renderHud(); renderFeed(); renderMap(); renderLabs(); renderHype(); renderWatch(); renderTape();
+  const newest = stories.length ? Math.max(...stories.map(s=>Date.parse(s.updated_at||s.published_at))) : 0;
+  document.getElementById("dot").className = (Date.now()-newest < 25*60e3) ? "" : "stale";
+}
+
+// ---------- command bar ----------
+const HELP = "COMMANDS — CONFIRMED · DEVELOPING · ALL · TOP · LATEST · CORR · HYPE · "
+  + "5M 15M 1H 6H 24H 7D · AUTO · LAB <name> · TOPIC <name> · WATCH <term> · CLEAR · R"
+  + (PARTNER ? "  ·  KEYS — j/k move · Enter open · p → " + PARTNER.name : "");
+
+function runCmd(raw){
+  const s = raw.trim(); if(!s) return;
+  const up = s.toUpperCase();
+  const [verb, ...rest] = up.split(/\s+/);
+  const arg = rest.join(" ").toLowerCase();
+  lastMsg = "";
+  if(WINDOWS[up]) { winKey = up; autoWindow = false; }        // explicit choice wins
+  else if(up === "HELP") lastMsg = HELP;
+  else if(up === "CONFIRMED") { minCorr = 3; sortMode = "CORR"; }
+  else if(up === "DEVELOPING") { minCorr = 2; sortMode = "CORR"; }
+  else if(up === "ALL") minCorr = 1;
+  else if(up === "AUTO") { autoWindow = true; winKey = pickAutoWindow(); }
+  else if(up === "TOP" || up === "SIGNAL") sortMode = "SIGNAL";
+  else if(up === "LATEST" || up === "NEW") sortMode = "LATEST";
+  else if(up === "CORR") sortMode = "CORR";
+  else if(up === "HYPE") sortMode = "HYPE";
+  else if(up === "CLEAR") { filterTopic=filterLab=filterTerm=null; minCorr=1; sortMode="SIGNAL"; autoWindow=true; winKey=pickAutoWindow(); }
+  else if(up === "R" || up === "REFRESH") { loadAll(); return; }
+  else if(verb === "LAB")   { filterLab = arg || null; if(arg && !labs.some(l=>l.lab===arg)) lastMsg = "no 7d activity for lab: "+arg; }
+  else if(verb === "TOPIC") { filterTopic = arg || null; }
+  else if(verb === "WATCH") { if(arg && !watch.some(w=>w.toLowerCase()===arg)){ watch.push(arg); saveWatch(); } filterTerm = arg || null; }
+  else { filterTerm = s; }          // bare text = search
+  selIdx = -1;
+  renderAll();
+}
+
+const cmd = document.getElementById("cmd");
+cmd.addEventListener("keydown", e => {
+  if(e.key === "Enter"){ runCmd(cmd.value); cmd.value = ""; }
+  if(e.key === "Escape"){ cmd.value = ""; cmd.blur(); }
+});
+document.getElementById("wbtn").onclick = () => {
+  const v = document.getElementById("winp").value.trim();
+  if(v && !watch.some(w=>w.toLowerCase()===v.toLowerCase())){ watch.push(v); saveWatch(); renderAll(); }
+  document.getElementById("winp").value = "";
+};
+document.getElementById("winp").addEventListener("keydown", e => { if(e.key==="Enter") document.getElementById("wbtn").click(); });
+
+document.addEventListener("keydown", e => {
+  if(e.target.tagName === "INPUT") return;
+  const k = e.key.toLowerCase();
+  if(k === "/"){ e.preventDefault(); cmd.focus(); return; }
+  if(k === "j"){ selIdx = Math.min(selIdx+1, visible().length-1); renderFeed(); document.querySelector(".row.sel")?.scrollIntoView({block:"nearest"}); }
+  else if(k === "k"){ selIdx = Math.max(selIdx-1, 0); renderFeed(); document.querySelector(".row.sel")?.scrollIntoView({block:"nearest"}); }
+  else if(e.key === "Enter" && selIdx >= 0) document.querySelector(".row.sel")?.click();
+  else if(k === "p" && selIdx >= 0) handoff(selIdx);
+  else if(k === "c") runCmd("CONFIRMED");
+  else if(k === "t") runCmd("TOP");
+  else if(k === "l") runCmd("LATEST");
+  else if(k === "r") loadAll();
+  else if(e.key === "Escape") runCmd("CLEAR");
+});
+
+setInterval(()=>{ document.getElementById("clk").textContent =
+  new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}); }, 1000);
+window.addEventListener("resize", () => renderMap());
+document.addEventListener("visibilitychange", () => { if(!document.hidden) loadAll(); });
+loadAll();
+setInterval(loadAll, 120000);
+</script>
+</body>
+</html>

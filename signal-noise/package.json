@@ -1,0 +1,15 @@
+{
+  "name": "signal-noise",
+  "version": "1.0.0",
+  "description": "An AI news terminal that ranks stories by independent corroboration.",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "node tests/run.mjs",
+    "test:ui": "node tests/ui.test.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "playwright": "^1.50.0"
+  }
+}
