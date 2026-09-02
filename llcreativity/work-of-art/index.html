@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work of Art — LLcreativity</title>
+<meta name="description" content="Living brand worlds built by LLcreativity. Creative demonstrations — proof of how far a business can be taken.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --black:#0d060a; --black-2:#150a10;
+  --cream:#f1e8dc; --cream-dim:#cfc2b3;
+  --rose:#c98f8f; --rose-deep:#8c5a5c; --metal:#b9a47e;
+  --hairline:rgba(241,232,220,.14);
+  --serif:"Fraunces","Iowan Old Style",Georgia,"Times New Roman",serif;
+  --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--black); color:var(--cream);
+  font-family:var(--sans); font-weight:300; line-height:1.5;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+::selection{background:var(--rose-deep);color:var(--cream)}
+a{color:inherit;text-decoration:none}
+
+.grain{
+  position:fixed; inset:-40px; z-index:70; pointer-events:none; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.1s steps(4) infinite;
+}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-14px,9px)}50%{transform:translate(11px,-13px)}75%{transform:translate(-8px,-7px)}100%{transform:translate(0,0)}}
+
+.head{
+  position:fixed; inset:0 0 auto 0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:clamp(18px,2.6vw,30px) clamp(20px,3.6vw,52px);
+  mix-blend-mode:difference;
+}
+.wordmark{font-family:var(--serif);font-weight:500;font-size:clamp(17px,1.45vw,21px);display:flex;align-items:baseline;gap:.14em}
+.wordmark .ll{letter-spacing:-.14em;padding-right:.16em;font-weight:600}
+.wordmark .rest{font-style:italic;font-weight:400}
+.head-back{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:400;color:var(--cream-dim)}
+.head-back:hover{color:var(--cream)}
+
+.kicker{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--cream-dim);font-weight:400}
+.kicker .dot{color:var(--rose)}
+em{font-family:var(--serif);font-style:italic;color:var(--rose);font-weight:400}
+
+.hero{
+  min-height:72vh; display:flex; flex-direction:column; justify-content:flex-end;
+  padding:clamp(120px,20vh,200px) clamp(20px,4vw,64px) clamp(48px,7vh,84px);
+  position:relative; overflow:hidden;
+  background:
+    radial-gradient(90% 70% at 80% -20%, rgba(140,90,92,.16), transparent 65%),
+    radial-gradient(70% 55% at 10% 110%, rgba(185,164,126,.08), transparent 70%),
+    var(--black);
+}
+.hero .kicker{margin-bottom:clamp(18px,2.6vh,30px)}
+.hero h1{
+  font-family:var(--serif); font-weight:330;
+  font-size:clamp(52px,10vw,148px); line-height:.98; letter-spacing:-.025em;
+}
+.hero p.lede{
+  margin-top:clamp(20px,3.2vh,34px); max-width:52ch;
+  color:var(--cream-dim); font-size:clamp(14px,1.15vw,17px); line-height:1.7;
+}
+
+.gallery{border-top:1px solid var(--hairline)}
+.piece{
+  display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:baseline;
+  gap:clamp(16px,3vw,48px);
+  padding:clamp(30px,5.5vh,56px) clamp(20px,4vw,64px);
+  border-bottom:1px solid var(--hairline);
+  position:relative; transition:background-color .45s ease;
+}
+.piece:hover{background:var(--black-2)}
+.piece-num{font-size:11px;letter-spacing:.26em;color:var(--rose)}
+.piece-name{
+  font-family:var(--serif); font-weight:330; letter-spacing:-.018em;
+  font-size:clamp(28px,4.6vw,64px); line-height:1.05;
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+}
+.piece:hover .piece-name{transform:translateX(clamp(6px,1vw,14px))}
+.piece-tag{
+  color:var(--cream-dim); font-size:clamp(12px,.95vw,14.5px); line-height:1.6;
+  max-width:30ch; text-align:right;
+}
+.piece-tag i{display:block;font-style:normal;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--rose);margin-bottom:.5em}
+.piece-arr{
+  font-family:var(--serif); font-size:clamp(20px,2vw,28px); color:var(--cream-dim);
+  transition:transform .45s cubic-bezier(.22,1,.36,1), color .45s ease;
+}
+.piece:hover .piece-arr{transform:translate(6px,-6px);color:var(--metal)}
+@media (max-width:760px){
+  .piece{grid-template-columns:auto minmax(0,1fr) auto}
+  .piece-tag{display:none}
+}
+
+.note{
+  padding:clamp(70px,12vh,120px) clamp(20px,4vw,64px);
+  display:flex; flex-wrap:wrap; gap:26px 60px; align-items:baseline; justify-content:space-between;
+}
+.note h2{
+  font-family:var(--serif); font-weight:340; letter-spacing:-.02em;
+  font-size:clamp(24px,3vw,40px); line-height:1.15; max-width:22ch;
+}
+.note a.cta{
+  display:inline-flex; align-items:center; gap:14px;
+  font-size:11px; letter-spacing:.26em; text-transform:uppercase; font-weight:400;
+  padding:16px 30px; border:1px solid rgba(241,232,220,.5); border-radius:999px;
+  transition:border-color .4s ease, background-color .4s ease;
+}
+.note a.cta:hover{border-color:var(--rose);background:rgba(201,143,143,.06)}
+
+footer{
+  border-top:1px solid var(--hairline);
+  padding:clamp(26px,4vh,40px) clamp(20px,4vw,64px);
+  display:flex; flex-wrap:wrap; gap:12px 34px; justify-content:space-between; align-items:center;
+  font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--cream-dim);
+}
+footer .f-mark{font-family:var(--serif);text-transform:none;letter-spacing:.01em;font-size:14px;color:var(--cream)}
+
+/* reveals */
+.r{opacity:0; transform:translateY(28px); transition:opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1)}
+.r.in{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){
+  .grain{animation:none}
+  .r{opacity:1; transform:none; transition:none}
+  .piece, .piece-name, .piece-arr{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="head">
+  <a class="wordmark" href="/" aria-label="LLcreativity — home">
+    <span class="ll">LL</span><span class="rest">Creativity</span>
+  </a>
+  <a class="head-back" href="/">← The showroom</a>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="kicker r"><span class="dot">●</span>&nbsp; Living brand worlds · Creative demonstrations · Not client work</p>
+    <h1 class="r">Work of <em>art.</em></h1>
+    <p class="lede r">Each of these is a complete world, built for a business that doesn't exist yet — so the one that does can see how far it could go. Every site below is live. Walk in.</p>
+  </section>
+
+  <section class="gallery" aria-label="The worlds">
+    <a class="piece r" href="https://saison-noir.vercel.app" target="_blank" rel="noopener">
+      <span class="piece-num">01</span>
+      <span class="piece-name">Saison Noir</span>
+      <span class="piece-tag"><i>Fine dining</i>Dinner is a room, not a menu.</span>
+      <span class="piece-arr" aria-hidden="true">↗</span>
+    </a>
+    <a class="piece r" href="https://atelier-lumen.vercel.app" target="_blank" rel="noopener">
+      <span class="piece-num">02</span>
+      <span class="piece-name">Atelier Lumen</span>
+      <span class="piece-tag"><i>Lighting atelier</i>L'art d'habiter la lumière.</span>
+      <span class="piece-arr" aria-hidden="true">↗</span>
+    </a>
+    <a class="piece r" href="https://domaine-valois.vercel.app" target="_blank" rel="noopener">
+      <span class="piece-num">03</span>
+      <span class="piece-name">Domaine Valois</span>
+      <span class="piece-tag"><i>Winery</i>Held until it's ready.</span>
+      <span class="piece-arr" aria-hidden="true">↗</span>
+    </a>
+    <a class="piece r" href="https://vesper-house.vercel.app" target="_blank" rel="noopener">
+      <span class="piece-num">04</span>
+      <span class="piece-name">Vesper House</span>
+      <span class="piece-tag"><i>Residences</i>Twelve residences. One address.</span>
+      <span class="piece-arr" aria-hidden="true">↗</span>
+    </a>
+    <a class="piece r" href="https://hale-meridian.vercel.app" target="_blank" rel="noopener">
+      <span class="piece-num">05</span>
+      <span class="piece-name">Hale &amp; Meridian</span>
+      <span class="piece-tag"><i>Private wealth counsel</i>Calm counsel, quietly kept.</span>
+      <span class="piece-arr" aria-hidden="true">↗</span>
+    </a>
+    <a class="piece r" href="https://eclat-no19.vercel.app" target="_blank" rel="noopener">
+      <span class="piece-num">06</span>
+      <span class="piece-name">Éclat No.&thinsp;19</span>
+      <span class="piece-tag"><i>Independent watchmaking</i>Time, taken seriously.</span>
+      <span class="piece-arr" aria-hidden="true">↗</span>
+    </a>
+    <a class="piece r" href="https://north-and-key.vercel.app" target="_blank" rel="noopener">
+      <span class="piece-num">07</span>
+      <span class="piece-name">North &amp; Key</span>
+      <span class="piece-tag"><i>Architecture &amp; interiors</i>Rooms that hold their nerve.</span>
+      <span class="piece-arr" aria-hidden="true">↗</span>
+    </a>
+  </section>
+
+  <section class="note">
+    <h2 class="r">None of these businesses exist. <em>Yours</em> does.</h2>
+    <a class="cta r" href="mailto:hello@llcreativityllc.com?subject=Free%20teardown%20request">Request a free teardown <span aria-hidden="true">→</span></a>
+  </section>
+</main>
+
+<footer>
+  <span class="f-mark"><b style="letter-spacing:-.12em;font-weight:600">LL</b><em style="color:var(--cream)">Creativity</em> LLC</span>
+  <span>Tampa · working worldwide</span>
+  <span>All worlds are creative demonstration</span>
+</footer>
+
+<script>
+(function(){
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll(".r").forEach(function(el){ el.classList.add("in"); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".r").forEach(function(el, i){
+    el.style.transitionDelay = (i % 8) * 60 + "ms";
+    io.observe(el);
+  });
+})();
+</script>
+</body>
+</html>
