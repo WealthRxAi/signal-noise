@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/work-of-art", "destination": "/collection", "permanent": true }
+  ]
+}
