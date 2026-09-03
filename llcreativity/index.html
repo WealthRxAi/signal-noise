@@ -280,6 +280,24 @@ em, .it{ font-family:var(--serif); font-style:italic; color:var(--rose); font-we
   linear-gradient(180deg, transparent 62%, rgba(185,164,126,.10) 63%, transparent 64%),
   radial-gradient(140% 100% at 50% 115%, #0e1622 0%, #0a0f18 50%, #06090e 100%); }
 .world-veil{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(13,6,10,.25), rgba(13,6,10,0) 40%, rgba(13,6,10,.55)); }
+.world-link{ display:block; color:inherit; }
+.world-shot{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:top center;
+  filter:brightness(.68) saturate(.85);
+  transition:filter .8s ease;
+}
+.world-link:hover .world-shot{ filter:brightness(.92) saturate(1); }
+.world-enter{
+  position:absolute; top:clamp(16px,3vh,34px); right:clamp(18px,3.4vw,48px); z-index:2;
+  font-size:10px; letter-spacing:.26em; text-transform:uppercase; color:var(--cream);
+  background:rgba(13,6,10,.55); padding:10px 16px;
+  border:1px solid rgba(241,232,220,.25); border-radius:999px;
+  opacity:0; transform:translateY(6px);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1);
+}
+.world-link:hover .world-enter{ opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce){ .world-shot,.world-enter{ transition:none; } }
 .world-copy{
   position:absolute; left:clamp(18px,3.4vw,48px); bottom:clamp(20px,4vh,44px); right:clamp(18px,3.4vw,48px);
   display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
@@ -502,63 +520,78 @@ footer .f-mark{ font-family:var(--serif); text-transform:none; letter-spacing:.0
     </div>
 
     <article class="world world-eterne">
+      <a class="world-link" href="https://eterne.vercel.app" target="_blank" rel="noopener">
       <div class="world-frame">
-        <div class="world-bg" aria-hidden="true"></div>
+        <div class="world-bg" aria-hidden="true"><img class="world-shot" src="img/worlds/eterne.jpg" alt="ÉTERNE — haute horlogerie" loading="lazy"></div>
         <div class="world-veil" aria-hidden="true"></div>
-        <span class="world-num">01 · Luxury jewelry</span>
+        <span class="world-num">01 · Haute horlogerie</span>
+        <span class="world-enter" aria-hidden="true">Enter the world ↗</span>
         <div class="world-copy">
           <h3 class="world-name">ETERNE</h3>
-          <p class="world-desc">Quiet permanence. A house built around one ring and the silence it deserves.</p>
+          <p class="world-desc">Quiet permanence. A house built around one calibre and the silence it deserves.</p>
         </div>
       </div>
+      </a>
     </article>
 
     <article class="world world-axyl">
+      <a class="world-link" href="https://axyl-five.vercel.app" target="_blank" rel="noopener">
       <div class="world-frame">
-        <div class="world-bg" aria-hidden="true"></div>
+        <div class="world-bg" aria-hidden="true"><img class="world-shot" src="img/worlds/axyl.jpg" alt="AXYL — chaos was never luxury" loading="lazy"></div>
         <div class="world-veil" aria-hidden="true"></div>
         <span class="world-num">02 · Luxury handbags</span>
+        <span class="world-enter" aria-hidden="true">Enter the world ↗</span>
         <div class="world-copy">
           <h3 class="world-name">AXYL</h3>
           <p class="world-desc">Editorial pacing. Each piece enters like a page of a magazine you keep.</p>
         </div>
       </div>
+      </a>
     </article>
 
     <article class="world world-evershine">
+      <a class="world-link" href="https://evershine-atelier.vercel.app" target="_blank" rel="noopener">
       <div class="world-frame">
-        <div class="world-bg" aria-hidden="true"></div>
+        <div class="world-bg" aria-hidden="true"><img class="world-shot" src="img/worlds/evershine.jpg" alt="Evershine Jewelers — the atelier" loading="lazy"></div>
         <div class="world-veil" aria-hidden="true"></div>
         <span class="world-num">03 · Fine jewelry atelier</span>
+        <span class="world-enter" aria-hidden="true">Enter the world ↗</span>
         <div class="world-copy">
           <h3 class="world-name">Evershine</h3>
           <p class="world-desc">The bench, the light, the stone. Craft photographed like architecture.</p>
         </div>
       </div>
+      </a>
     </article>
 
     <article class="world world-kreogrid">
+      <a class="world-link" href="https://kreogrid.ai" target="_blank" rel="noopener">
       <div class="world-frame">
-        <div class="world-bg" aria-hidden="true"></div>
+        <div class="world-bg" aria-hidden="true"><img class="world-shot" src="img/worlds/kreogrid.jpg" alt="KreoGrid — trends into publish-ready content packs" loading="lazy"></div>
         <div class="world-veil" aria-hidden="true"></div>
         <span class="world-num">04 · Creative systems</span>
+        <span class="world-enter" aria-hidden="true">Enter the world ↗</span>
         <div class="world-copy">
           <h3 class="world-name">KreoGrid</h3>
           <p class="world-desc">Ideas in, publish-ready out. A working system wearing a calm face.</p>
         </div>
       </div>
+      </a>
     </article>
 
     <article class="world world-wealthrx">
+      <a class="world-link" href="https://wealthrx.ai" target="_blank" rel="noopener">
       <div class="world-frame">
-        <div class="world-bg" aria-hidden="true"></div>
+        <div class="world-bg" aria-hidden="true"><img class="world-shot" src="img/worlds/wealthrx.jpg" alt="WealthRx — AI bookkeeping for CPAs" loading="lazy"></div>
         <div class="world-veil" aria-hidden="true"></div>
         <span class="world-num">05 · Financial services</span>
+        <span class="world-enter" aria-hidden="true">Enter the world ↗</span>
         <div class="world-copy">
           <h3 class="world-name">WealthRx</h3>
           <p class="world-desc">Financial calm, not fintech neon. Numbers that lower your shoulders.</p>
         </div>
       </div>
+      </a>
     </article>
   </section>
 
