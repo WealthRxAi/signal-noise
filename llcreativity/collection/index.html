@@ -181,6 +181,17 @@ footer .f-mark{font-family:var(--serif);text-transform:none;letter-spacing:.01em
   .r,.exhibit .frame{opacity:1; transform:none; transition:none; clip-path:none}
   .frame img,.frame .enter{transition:none}
 }
+
+.chapter{ margin-bottom:clamp(40px,7vh,80px); }
+.chapter-head{
+  display:flex; align-items:baseline; gap:clamp(14px,1.6vw,24px);
+  font-family:var(--serif); font-weight:340; letter-spacing:-.015em;
+  font-size:clamp(26px,3.2vw,44px); line-height:1.1;
+  padding:0 0 clamp(18px,3vh,30px); margin-bottom:clamp(40px,7vh,72px);
+  border-bottom:1px solid var(--hairline);
+}
+.chapter-head .ch-no{ font-style:italic; color:var(--rose); font-size:.62em; }
+.chapter-head .ch-count{ margin-left:auto; font-family:var(--sans); font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--cream-dim); }
 </style>
 </head>
 <body>
@@ -199,92 +210,118 @@ footer .f-mark{font-family:var(--serif);text-transform:none;letter-spacing:.01em
     <p class="kicker r"><span class="dot">●</span>&nbsp; Living brand worlds · Creative demonstrations · Not client work</p>
     <h1 class="r">The <em>collection.</em></h1>
     <p class="lede r">Each of these is a complete world, built for a business that doesn't exist yet — so the one that does can see how far it could go. Every piece is a live site. Walk in.</p>
-    <span class="hero-count r" aria-hidden="true">Nine pieces · hung 2026</span>
+    <span class="hero-count r" aria-hidden="true">9 pieces · hung 2026</span>
   </section>
 
   <section class="salon" aria-label="The worlds">
 
-    <a class="exhibit r" data-num="01" href="https://aurelia-pied-seven.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/aurelia.jpg" alt="Aurelia — a stone coastal house at dusk above the sea" fetchpriority="high">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>01</i>Aurelia</span>
-        <span class="p-medium"><b>Private coastal house</b>Eleven rooms. Stone, linen, water, dusk.</span>
-      </span>
-    </a>
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">I</span> Hospitality <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="01" href="https://aurelia-pied-seven.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/aurelia.jpg" alt="Aurelia — Private coastal house" fetchpriority="high">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>01</i>Aurelia</span>
+          <span class="p-medium"><b>Private coastal house</b>Eleven rooms. Stone, linen, water, dusk.</span>
+        </span>
+      </a>
+    </div>
 
-    <a class="exhibit r" data-num="02" href="https://saison-noir.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/saison-noir.jpg" alt="Saison Noir — fire-lit dining room typography over open flame" loading="lazy">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>02</i>Saison Noir</span>
-        <span class="p-medium"><b>Fine dining</b>Dinner is a room, not a menu.</span>
-      </span>
-    </a>
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">II</span> Food <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="02" href="https://saison-noir.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/saison-noir.jpg" alt="Saison Noir — Fine dining" loading="lazy">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>02</i>Saison Noir</span>
+          <span class="p-medium"><b>Fine dining</b>Dinner is a room, not a menu.</span>
+        </span>
+      </a>
+    </div>
 
-    <a class="exhibit r" data-num="03" href="https://atelier-lumen-psi.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/atelier-lumen.jpg" alt="Atelier Lumen — private aesthetics and regenerative clinic" loading="lazy">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>03</i>Atelier Lumen</span>
-        <span class="p-medium"><b>Aesthetics &amp; regenerative clinic</b>Precision, without performance.</span>
-      </span>
-    </a>
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">III</span> Wine &amp; Spirits <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="03" href="https://domaine-valois.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/domaine-valois.jpg" alt="Domaine Valois — Winery" loading="lazy">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>03</i>Domaine Valois</span>
+          <span class="p-medium"><b>Winery</b>Held until it's ready.</span>
+        </span>
+      </a>
+    </div>
 
-    <a class="exhibit r" data-num="04" href="https://domaine-valois.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/domaine-valois.jpg" alt="Domaine Valois — winery" loading="lazy">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>04</i>Domaine Valois</span>
-        <span class="p-medium"><b>Winery</b>Held until it's ready.</span>
-      </span>
-    </a>
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">IV</span> Fashion &amp; Object <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="04" href="https://eclat-no19.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/eclat-no19.jpg" alt="Éclat No. 19 — Independent watchmaking" loading="lazy">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>04</i>Éclat No. 19</span>
+          <span class="p-medium"><b>Independent watchmaking</b>Time, taken seriously.</span>
+        </span>
+      </a>
+    </div>
 
-    <a class="exhibit r" data-num="05" href="https://vesper-house.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/vesper-house.jpg" alt="Vesper House — twelve residences, one address" loading="lazy">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>05</i>Vesper House</span>
-        <span class="p-medium"><b>Residences</b>Twelve residences. One address.</span>
-      </span>
-    </a>
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">V</span> Architecture &amp; Furniture <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="05" href="https://north-and-key.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/north-and-key.jpg" alt="North &amp; Key — Architecture &amp; interiors" loading="lazy">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>05</i>North &amp; Key</span>
+          <span class="p-medium"><b>Architecture &amp; interiors</b>Rooms that hold their nerve.</span>
+        </span>
+      </a>
+    </div>
 
-    <a class="exhibit r" data-num="06" href="https://hale-meridian.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/hale-meridian.jpg" alt="Hale and Meridian — private wealth counsel" loading="lazy">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>06</i>Hale &amp; Meridian</span>
-        <span class="p-medium"><b>Private wealth counsel</b>Calm counsel, quietly kept.</span>
-      </span>
-    </a>
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">VI</span> Real Estate <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="06" href="https://vesper-house.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/vesper-house.jpg" alt="Vesper House — Residences" loading="lazy">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>06</i>Vesper House</span>
+          <span class="p-medium"><b>Residences</b>Twelve residences. One address.</span>
+        </span>
+      </a>
+    </div>
 
-    <a class="exhibit r" data-num="07" href="https://eclat-no19.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/eclat-no19.jpg" alt="Éclat No. 19 — independent watchmaking" loading="lazy">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>07</i>Éclat No.&thinsp;19</span>
-        <span class="p-medium"><b>Independent watchmaking</b>Time, taken seriously.</span>
-      </span>
-    </a>
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">VII</span> Wellness <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="07" href="https://atelier-lumen-psi.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/atelier-lumen.jpg" alt="Atelier Lumen — Aesthetics &amp; regenerative clinic" loading="lazy">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>07</i>Atelier Lumen</span>
+          <span class="p-medium"><b>Aesthetics &amp; regenerative clinic</b>Precision, without performance.</span>
+        </span>
+      </a>
+    </div>
 
-    <a class="exhibit r" data-num="08" href="https://north-and-key.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/north-and-key.jpg" alt="North and Key — architecture and interiors atelier" loading="lazy">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>08</i>North &amp; Key</span>
-        <span class="p-medium"><b>Architecture &amp; interiors</b>Rooms that hold their nerve.</span>
-      </span>
-    </a>
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">VIII</span> Professional <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="08" href="https://hale-meridian.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/hale-meridian.jpg" alt="Hale &amp; Meridian — Private wealth counsel" loading="lazy">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>08</i>Hale &amp; Meridian</span>
+          <span class="p-medium"><b>Private wealth counsel</b>Calm counsel, quietly kept.</span>
+        </span>
+      </a>
+    </div>
 
-    <a class="exhibit r" data-num="09" href="https://godseye-five.vercel.app" target="_blank" rel="noopener">
-      <span class="frame"><img src="/collection/img/godseye.jpg" alt="Godseye — live-camera object explorer" loading="lazy">
-        <span class="enter">Enter the world ↗</span></span>
-      <span class="placard">
-        <span class="p-name"><i>09</i>Godseye</span>
-        <span class="p-medium"><b>Living software</b>Public cameras on Earth, one pane of glass.</span>
-      </span>
-    </a>
-
+    <div class="chapter">
+      <h2 class="chapter-head r"><span class="ch-no">IX</span> Software <span class="ch-count">1 piece</span></h2>
+      <a class="exhibit r" data-num="09" href="https://godseye-five.vercel.app" target="_blank" rel="noopener">
+        <span class="frame"><img src="/collection/img/godseye.jpg" alt="Godseye — Living software" loading="lazy">
+          <span class="enter">Enter the world ↗</span></span>
+        <span class="placard">
+          <span class="p-name"><i>09</i>Godseye</span>
+          <span class="p-medium"><b>Living software</b>Public cameras on Earth, one pane of glass.</span>
+        </span>
+      </a>
+    </div>
   </section>
 
   <section class="note">
