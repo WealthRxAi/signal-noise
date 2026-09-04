@@ -8,7 +8,7 @@ One self-contained production HTML file: `index.html`. No build step, no externa
 
 - **Act 1 — The showroom.** Full-viewport WebGL forge (molten field → cooling pour → a single forged line), pinned for 300vh with the shader's playhead owned by scroll. Falls back to a styled poster gradient if WebGL is unavailable.
 - **Act 2 — Thesis.** Pinned, scrubbed type: "Client work is the Ferrari. This site is the floor above it."
-- **Act 3 — Imagine yours.** Pinned before/after wipe: an ordinary jewelry page becomes Maison Élan as you scroll.
+- **Act 3 — Imagine yours.** Pinned before/after wipe: an ordinary page for the fictional Gildhaven Jewelers becomes the Gildhaven house as you scroll.
 - **Act 4 — Five living worlds.** ETERNE, AXYL, Evershine, KreoGrid, WealthRx as quiet environmental frames (scale + clip on scroll, parallax ≤ 8%).
 - **Act 5 — Founder + ownership.** Salman Lakhani; See it first / Own everything / Speak directly / Built for you.
 - **Act 6 — Services.** Website redesign from $2,500 · Ads management $800/mo.
