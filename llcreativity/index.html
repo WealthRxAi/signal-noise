@@ -10,7 +10,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Archivo:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -29,6 +29,7 @@
   --hairline:   rgba(241,232,220,.14);
   --serif: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --sans:  "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono:  "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 *{ margin:0; padding:0; box-sizing:border-box; }
 html{ scroll-behavior:auto; }
@@ -82,6 +83,21 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   transition:border-color .4s ease, background-color .4s ease;
 }
 .head-cta:hover{ border-color:var(--rose); background:rgba(13,6,10,.8); }
+.head-right{ display:flex; align-items:center; gap:10px; }
+.head-collection{
+  font-family:var(--mono); font-weight:700; font-size:12px; letter-spacing:.06em;
+  color:var(--black); background:var(--rose);
+  padding:12px 22px; border:1px solid var(--rose); border-radius:999px;
+  display:inline-block; transition:background-color .35s ease, color .35s ease;
+}
+.head-collection:hover{ background:var(--cream); border-color:var(--cream); }
+/* collection link voice — mono, unmistakably clickable */
+.c-link{
+  font-family:var(--mono); font-weight:700; color:var(--rose);
+  letter-spacing:.05em; text-decoration:underline; text-underline-offset:5px;
+  text-decoration-thickness:1px;
+}
+.c-link:hover{ color:var(--cream); }
 @media (max-width:640px){ .head-cta{ display:none; } }
 
 /* ---------- film grain ---------- */
@@ -305,6 +321,50 @@ em, .it{ font-family:var(--serif); font-style:italic; color:var(--rose); font-we
 }
 .world-link:hover .world-enter{ opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce){ .world-shot,.world-enter{ transition:none; } }
+
+/* ---------- from the collection · filmstrip ---------- */
+.cstrip{ background:var(--black-2); border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline);
+  padding:clamp(70px,12vh,120px) 0; overflow:hidden; }
+.cstrip-head{
+  padding:0 clamp(20px,4vw,64px); margin-bottom:clamp(34px,5vh,54px);
+  display:flex; flex-wrap:wrap; gap:16px 40px; align-items:baseline; justify-content:space-between;
+}
+.cstrip-head h2{
+  font-family:var(--serif); font-weight:340; letter-spacing:-.02em;
+  font-size:clamp(30px,4.4vw,60px); line-height:1.06;
+}
+.cstrip-scroll{ overflow:hidden; }
+.cstrip-track{
+  display:flex; gap:clamp(12px,1.4vw,20px); width:max-content;
+  animation:cmarq 55s linear infinite;
+}
+.cstrip-scroll:hover .cstrip-track{ animation-play-state:paused; }
+@keyframes cmarq{ to{ transform:translateX(-50%); } }
+.ccard{
+  position:relative; display:block; flex:none; overflow:hidden;
+  width:clamp(230px,26vw,380px); aspect-ratio:16/10;
+  border:1px solid var(--hairline); background:var(--black);
+}
+.ccard img{ width:100%; height:100%; object-fit:cover; object-position:top center;
+  transition:transform .8s cubic-bezier(.22,1,.36,1); }
+.ccard:hover img{ transform:scale(1.05); }
+.ccard b{
+  position:absolute; left:12px; bottom:10px; font-weight:700;
+  font-family:var(--mono); font-size:11px; letter-spacing:.05em; color:var(--cream);
+  text-shadow:0 1px 10px rgba(13,6,10,.95), 0 0 3px rgba(13,6,10,.9);
+}
+.cstrip-cta{
+  display:block; width:fit-content; margin:clamp(40px,6vh,64px) auto 0;
+  font-family:var(--mono); font-weight:700; letter-spacing:.05em;
+  font-size:clamp(15px,1.9vw,25px); color:var(--black);
+  background:var(--rose); padding:clamp(16px,2.2vh,22px) clamp(28px,3.4vw,48px);
+  border-radius:999px; transition:background-color .35s ease;
+}
+.cstrip-cta:hover{ background:var(--cream); }
+@media (prefers-reduced-motion:reduce){
+  .cstrip-track{ animation:none; }
+  .cstrip-scroll{ overflow-x:auto; }
+}
 .world-copy{
   position:absolute; left:clamp(18px,3.4vw,48px); bottom:clamp(20px,4vh,44px); right:clamp(18px,3.4vw,48px);
   display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
@@ -429,7 +489,10 @@ footer .f-mark{ font-family:var(--serif); text-transform:none; letter-spacing:.0
   <a class="wordmark" href="#top" aria-label="LLcreativity — home">
     <span class="ll">LL</span><span class="rest">Creativity</span>
   </a>
-  <a class="head-cta magnetic" href="#teardown">Free teardown</a>
+  <span class="head-right">
+    <a class="head-collection" href="/collection">THE COLLECTION · 43 ↗</a>
+    <a class="head-cta magnetic" href="#teardown">Free teardown</a>
+  </span>
 </header>
 
 <main id="top">
@@ -449,6 +512,7 @@ footer .f-mark{ font-family:var(--serif); text-transform:none; letter-spacing:.0
         <span class="l"><span class="li">people <em>feel</em> it.</span></span>
       </h1>
       <p class="hero-sub l"><span class="li">Custom websites &amp; campaigns for businesses that <em>refuse to look ordinary.</em></span></p>
+      <p class="l" style="margin-top:clamp(16px,2.6vh,26px)"><span class="li"><a class="c-link" href="/collection" style="font-size:clamp(13px,1.2vw,17px)">SEE 43 LIVE WORLDS WE BUILT — THE COLLECTION ↗</a></span></p>
     </div>
     <div class="hero-cue" aria-hidden="true"><span>Scroll</span><i></i></div>
   </section>
@@ -524,7 +588,7 @@ footer .f-mark{ font-family:var(--serif); text-transform:none; letter-spacing:.0
         <span class="l"><span class="li">built to prove the point.</span></span>
       </h2>
       <p class="kicker">Creative demonstrations · Not client work<br>
-      <a href="/collection" style="color:var(--rose);letter-spacing:.2em">Browse all 43 worlds — every palette, light to dark ↗</a></p>
+      <a class="c-link" href="/collection" style="font-size:13px">BROWSE ALL 43 WORLDS — EVERY PALETTE, LIGHT TO DARK ↗</a></p>
     </div>
 
     <article class="world world-eterne">
@@ -601,6 +665,40 @@ footer .f-mark{ font-family:var(--serif); text-transform:none; letter-spacing:.0
       </div>
       </a>
     </article>
+  </section>
+
+
+  <!-- ═══════════ FROM THE COLLECTION · filmstrip ═══════════ -->
+  <section class="cstrip" aria-label="From the collection">
+    <div class="cstrip-head">
+      <h2>From <em>the collection.</em></h2>
+      <a class="c-link" href="/collection" style="font-size:clamp(13px,1.2vw,17px)">ALL 43 WORLDS ↗</a>
+    </div>
+    <div class="cstrip-scroll">
+      <div class="cstrip-track">
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/sola-mar/" target="_blank" rel="noopener"><img src="/collection/img/sola-mar.jpg" alt="Sola Mar — island camp" loading="lazy"><b>SOLA MAR</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/casa-miga/" target="_blank" rel="noopener"><img src="/collection/img/casa-miga.jpg" alt="Casa Miga — bakery-restaurant" loading="lazy"><b>CASA MIGA</b></a>
+        <a class="ccard" href="https://aurelia-pied-seven.vercel.app" target="_blank" rel="noopener"><img src="/collection/img/aurelia.jpg" alt="Aurelia — private coastal house" loading="lazy"><b>AURELIA</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/verde-crudo/" target="_blank" rel="noopener"><img src="/collection/img/verde-crudo.jpg" alt="Verde Crudo — vegetable dining" loading="lazy"><b>VERDE CRUDO</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/kane-house/" target="_blank" rel="noopener"><img src="/collection/img/kane-house.jpg" alt="Kane House — mountain inn" loading="lazy"><b>KANE HOUSE</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/sorelle-linen/" target="_blank" rel="noopener"><img src="/collection/img/sorelle-linen.jpg" alt="Sorelle Linen — textiles" loading="lazy"><b>SORELLE LINEN</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/orbis/" target="_blank" rel="noopener"><img src="/collection/img/orbis.jpg" alt="Orbis — city members club" loading="lazy"><b>ORBIS</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/stillhouse-grey/" target="_blank" rel="noopener"><img src="/collection/img/stillhouse-grey.jpg" alt="Stillhouse Grey — rye whiskey" loading="lazy"><b>STILLHOUSE GREY</b></a>
+        <a class="ccard" href="https://eclat-no19.vercel.app" target="_blank" rel="noopener"><img src="/collection/img/eclat-no19.jpg" alt="Éclat No. 19 — watchmaking" loading="lazy"><b>ÉCLAT No.19</b></a>
+        <a class="ccard" href="https://godseye-five.vercel.app" target="_blank" rel="noopener"><img src="/collection/img/godseye.jpg" alt="Godseye — live camera explorer" loading="lazy"><b>GODSEYE</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/sola-mar/" target="_blank" rel="noopener"><img src="/collection/img/sola-mar.jpg" alt="Sola Mar — island camp" loading="lazy"><b>SOLA MAR</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/casa-miga/" target="_blank" rel="noopener"><img src="/collection/img/casa-miga.jpg" alt="Casa Miga — bakery-restaurant" loading="lazy"><b>CASA MIGA</b></a>
+        <a class="ccard" href="https://aurelia-pied-seven.vercel.app" target="_blank" rel="noopener"><img src="/collection/img/aurelia.jpg" alt="Aurelia — private coastal house" loading="lazy"><b>AURELIA</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/verde-crudo/" target="_blank" rel="noopener"><img src="/collection/img/verde-crudo.jpg" alt="Verde Crudo — vegetable dining" loading="lazy"><b>VERDE CRUDO</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/kane-house/" target="_blank" rel="noopener"><img src="/collection/img/kane-house.jpg" alt="Kane House — mountain inn" loading="lazy"><b>KANE HOUSE</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/sorelle-linen/" target="_blank" rel="noopener"><img src="/collection/img/sorelle-linen.jpg" alt="Sorelle Linen — textiles" loading="lazy"><b>SORELLE LINEN</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/orbis/" target="_blank" rel="noopener"><img src="/collection/img/orbis.jpg" alt="Orbis — city members club" loading="lazy"><b>ORBIS</b></a>
+        <a class="ccard" href="https://llcreativity-websites.vercel.app/stillhouse-grey/" target="_blank" rel="noopener"><img src="/collection/img/stillhouse-grey.jpg" alt="Stillhouse Grey — rye whiskey" loading="lazy"><b>STILLHOUSE GREY</b></a>
+        <a class="ccard" href="https://eclat-no19.vercel.app" target="_blank" rel="noopener"><img src="/collection/img/eclat-no19.jpg" alt="Éclat No. 19 — watchmaking" loading="lazy"><b>ÉCLAT No.19</b></a>
+        <a class="ccard" href="https://godseye-five.vercel.app" target="_blank" rel="noopener"><img src="/collection/img/godseye.jpg" alt="Godseye — live camera explorer" loading="lazy"><b>GODSEYE</b></a>
+      </div>
+    </div>
+    <a class="cstrip-cta magnetic" href="/collection">ENTER THE COLLECTION — 43 LIVE WORLDS ↗</a>
   </section>
 
   <!-- ═══════════ ACT 5 · FOUNDER + OWNERSHIP ═══════════ -->
@@ -699,7 +797,7 @@ footer .f-mark{ font-family:var(--serif); text-transform:none; letter-spacing:.0
 
 <footer>
   <span class="f-mark"><b style="letter-spacing:-.12em;font-weight:600">LL</b><em style="color:var(--cream)">Creativity</em> LLC</span>
-  <a href="/collection" style="color:var(--rose)">The collection ↗</a>
+  <a class="c-link" href="/collection">THE COLLECTION · 43 ↗</a>
   <span>Tampa · working worldwide</span>
   <span>© 2026 · All work shown is creative demonstration</span>
 </footer>
