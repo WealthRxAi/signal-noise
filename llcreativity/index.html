@@ -254,6 +254,12 @@ em, .it{ font-family:var(--serif); font-style:italic; color:var(--rose); font-we
   box-shadow:0 0 60px rgba(201,143,143,.12) inset, 0 0 90px rgba(201,143,143,.08);
   pointer-events:none;
 }
+@media (max-width:640px){
+  .a-top{ flex-direction:column; gap:4px; }
+  .a-nav{ display:none; }
+  .head-collection{ font-size:10px; padding:9px 13px; letter-spacing:.04em; }
+  .cstrip-cta{ font-size:13px; padding:14px 22px; text-align:center; }
+}
 .wipe-edge{
   position:absolute; top:0; bottom:0; width:1px; left:0; z-index:3;
   background:linear-gradient(180deg,transparent,var(--metal),transparent);
